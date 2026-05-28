@@ -1,0 +1,40 @@
+# OS-specific files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDEs and Editors
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Logs and databases
+*.log
+*.sqlite
+
+# Local configuration/variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Node/dependency directories (if build tools are used later)
+node_modules/
+dist/
+build/
+.npm
+.eslintcache
+
+# Temporary/scratch files
+scratch/
+tmp/
+temp/

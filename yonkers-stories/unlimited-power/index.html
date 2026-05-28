@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Unlimited Power</title>
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Unlimited Power">
+  <meta name="twitter:description" content="Gideon Vale wants to harvest the pulsar beam. Martin Krake wants to open the airlock.">
+  <meta name="twitter:image" content="gideons_idea.jpg">
+
+  <meta property="og:title" content="Unlimited Power">
+  <meta property="og:description" content="Gideon Vale wants to harvest the pulsar beam. Martin Krake wants to open the airlock.">
+  <meta property="og:image" content="gideons_idea.jpg">
+  <meta property="og:type" content="article">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:ital,wght@0,300;0,400;1,300&family=Playfair+Display:ital,wght@0,400;1,400;1,700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --dust:       #c4b8a8;
+      --void:       #0e0c0f;
+      --deep:       #16121a;
+      --panel:      #1e1824;
+      --violet:     #6b3fa0;
+      --violet-dim: #3d2260;
+      --glow:       #b07aff;
+      --caution:    #e8c44a;
+      --warning:    #d9472b;
+      --text:       #d4ccc8;
+      --muted:      #7a7068;
+      --rule:       #2e2838;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--void);
+      color: var(--text);
+      font-family: 'DM Mono', monospace;
+      font-weight: 300;
+      font-size: 15px;
+      line-height: 1.85;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 999;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 256px;
+    }
+
+    @keyframes sweep {
+      0%   { transform: translateX(-110%) skewX(-8deg); opacity: 0; }
+      8%   { opacity: 1; }
+      92%  { opacity: 1; }
+      100% { transform: translateX(110%) skewX(-8deg); opacity: 0; }
+    }
+
+    .pulsar-sweep {
+      position: fixed;
+      top: 0; left: 0;
+      width: 180px; height: 100vh;
+      background: linear-gradient(90deg, transparent, rgba(176, 122, 255, 0.04), transparent);
+      pointer-events: none;
+      z-index: 1;
+      animation: sweep 11s ease-in-out infinite;
+    }
+
+    .hazard-bar {
+      width: 100%;
+      height: 6px;
+      background: repeating-linear-gradient(
+        -45deg,
+        var(--caution) 0px,
+        var(--caution) 12px,
+        var(--void) 12px,
+        var(--void) 24px
+      );
+      opacity: 0.85;
+    }
+
+    .masthead {
+      position: relative;
+      background: var(--deep);
+      border-bottom: 1px solid var(--rule);
+      padding: 0 clamp(24px, 6vw, 80px);
+      overflow: hidden;
+    }
+
+    .masthead::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 120% at 60% 50%, rgba(107,63,160,0.18) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .masthead-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 40px;
+      padding: 48px 0 40px;
+    }
+
+    .publication-tag {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.35em;
+      color: var(--violet);
+      text-transform: uppercase;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .publication-tag::before {
+      content: '';
+      display: inline-block;
+      width: 24px;
+      height: 1px;
+      background: var(--violet);
+    }
+
+    h1.title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(52px, 9vw, 110px);
+      line-height: 0.92;
+      letter-spacing: 0.02em;
+      color: #f0ece8;
+      text-transform: uppercase;
+    }
+
+    h1.title .highlight {
+      color: var(--glow);
+      display: block;
+    }
+
+    .meta-block {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 10px;
+    }
+
+    .meta-item {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .meta-item strong {
+      color: var(--dust);
+      font-weight: 400;
+    }
+
+    .warning-badge {
+      display: inline-block;
+      background: var(--warning);
+      color: #fff;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 12px;
+      letter-spacing: 0.18em;
+      padding: 4px 12px;
+      margin-top: 6px;
+    }
+
+    .placard-wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 36px clamp(24px, 6vw, 80px);
+    }
+
+    .placard {
+      border: 1px solid var(--violet-dim);
+      background: rgba(61, 34, 96, 0.22);
+      padding: 22px 28px;
+      position: relative;
+      max-width: 560px;
+    }
+
+    .placard::before {
+      content: '⚠';
+      position: absolute;
+      top: -1px; left: -1px;
+      font-size: 9px;
+      background: var(--violet-dim);
+      color: var(--glow);
+      padding: 3px 6px;
+      letter-spacing: 0.1em;
+    }
+
+    .placard-label {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 19px;
+      letter-spacing: 0.3em;
+      color: var(--caution);
+      margin-bottom: 10px;
+    }
+
+    .placard p {
+      font-size: 19px;
+      color: var(--dust);
+      line-height: 1.7;
+    }
+
+    /* ─── HERO IMAGE ─── */
+    .hero-image-wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 clamp(24px, 6vw, 80px) 0;
+      position: relative;
+    }
+
+    .hero-image-frame {
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: var(--panel);
+    }
+
+    .hero-image-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: saturate(0.7) contrast(1.1);
+    }
+
+    .hero-image-frame::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        transparent 40%,
+        rgba(14, 12, 15, 0.8) 100%
+      );
+    }
+
+    .hero-caption {
+      position: absolute;
+      bottom: 16px; left: clamp(24px, 6vw, 80px);
+      right: clamp(24px, 6vw, 80px);
+      z-index: 2;
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .content-wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 52px clamp(24px, 6vw, 80px) 80px;
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      gap: 64px;
+      align-items: start;
+    }
+
+    .story {
+      position: relative;
+    }
+
+    .story p {
+      margin-bottom: 1.5em;
+      color: var(--text);
+    }
+
+    .story p > em,
+    .story em {
+      font-style: italic;
+      color: var(--dust);
+      font-family: 'Playfair Display', serif;
+      font-size: 16px;
+    }
+
+    .story blockquote {
+      border-left: 2px solid var(--violet);
+      margin: 2em 0;
+      padding: 16px 24px;
+      background: rgba(107,63,160,0.12);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 18px;
+      letter-spacing: 0.22em;
+      color: var(--caution);
+      line-height: 1.6;
+    }
+
+    .story hr {
+      border: none;
+      border-top: 1px solid var(--rule);
+      margin: 2.5em 0;
+    }
+
+    .sfx {
+      display: block;
+      text-align: center;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      letter-spacing: 0.18em;
+      color: var(--violet-dim);
+      margin: 2em 0;
+      text-shadow: 0 0 40px #af7afff9;
+      text-shadow: 0 0 1px #cdabff, 0 0 1px #cdabff, 0 0 1px #cdabff, 0 0 1px #cdabff, 0 0 1px #cdabff;
+    }
+
+    .aside {
+      font-size: 14px;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .sidebar-card {
+      border: 1px solid var(--rule);
+      padding: 20px;
+      background: var(--panel);
+    }
+
+    .sidebar-card .card-label {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      color: var(--violet);
+      margin-bottom: 12px;
+      text-transform: uppercase;
+    }
+
+    .sidebar-card p,
+    .sidebar-card li {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .sidebar-card ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .sidebar-card li {
+      padding: 6px 0;
+      border-bottom: 1px solid var(--rule);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .sidebar-card li:last-child { border-bottom: none; }
+
+    .sidebar-card li span { color: var(--dust); }
+
+    .helix-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      letter-spacing: 0.2em;
+      color: var(--warning);
+      margin-bottom: 4px;
+    }
+
+    .helix-slogan {
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .masthead-inner,
+    .hero-image-wrap,
+    .content-wrap {
+      animation: fadeUp 0.8s ease both;
+    }
+
+    .hero-image-wrap  { animation-delay: 0.25s; }
+    .content-wrap     { animation-delay: 0.4s; }
+
+    @media (max-width: 760px) {
+      .masthead-inner { grid-template-columns: 1fr; }
+      .meta-block { align-items: flex-start; }
+      .content-wrap { grid-template-columns: 1fr; }
+      .sidebar { position: static; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="pulsar-sweep"></div>
+
+  <div class="hazard-bar"></div>
+
+  <!-- MASTHEAD -->
+  <header class="masthead">
+    <div class="masthead-inner">
+      <div>
+        <div class="publication-tag">Helix Extractive Solutions — Survey File 01-B</div>
+        <h1 class="title">
+          Unlimited
+          <span class="highlight">Power</span>
+        </h1>
+      </div>
+      <div class="meta-block">
+        <div class="meta-item">Sector <strong>Departing YK-441</strong></div>
+        <div class="meta-item">Vessel <strong>Prospect of Earnings</strong></div>
+        <div class="meta-item">Orbit <strong>Neutron Class VII</strong></div>
+        <div class="meta-item">Pulsar Cycle <strong>11 sec</strong></div>
+        <div class="meta-item">Classification <strong>Energy Proposal</strong></div>
+        <div class="warning-badge">Psych Screening Triggered</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO IMAGE -->
+  <div class="hero-image-wrap">
+    <div class="hero-image-frame">
+      <img src="gideons_idea.jpg" alt="A projection schematic of Gideon Vale's pulsar energy collector shown on the copilot deck of the Prospect of Earnings" />
+    </div>
+    <div class="hero-caption">
+      <span>Prospect of Earnings — Outbound Flight Deck</span>
+      <span>© Helix Extractive Solutions. Document archived under Form 99-D.</span>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="content-wrap">
+
+    <!-- STORY -->
+    <article class="story">
+
+      <p class="aside">The shuttle <em>Prospect of Earnings</em> drifted away from the unnamed planet while Gideon Vale sat upside down in the copilot seat eating dehydrated peaches directly from the packet.</p>
+      
+      <p class="aside">Outside the window, the pulsar flashed again.</p>
+
+      <span class="sfx">WHUMMMMMM.</span>
+
+      <p class="aside">The entire ship buzzed like an angry refrigerator.</p>
+      
+      <p class="aside">Martin Krake was writing the preliminary survey report:</p>
+      
+      <blockquote>
+        <div class="placard-label">Draft Report: YK-441</div>
+        <p>Planet suitable for automated and debt-based extractive operations. Recommend caution regarding radiation exposure and management psychopathy.</p>
+      </blockquote>
+
+      <p>Gideon suddenly sat upright.</p>
+      <p>“Oh my God.”</p>
+      
+      <p>Martin didn’t look up.</p>
+      <p>“That phrase has never improved my day.”</p>
+      
+      <p>“The pulsar.”</p>
+      <p>“Yes, I’m aware of the giant rotating death lighthouse.”</p>
+      <p>“We should harvest the beam.”</p>
+      
+      <p class="aside">Martin slowly lowered the tablet.</p>
+      
+      <p>“No.”</p>
+      <p>“Think about it.”</p>
+      <p>“I already have. The answer is no.”</p>
+      <p>“It’s free energy.”</p>
+      
+      <p class="aside">Martin stared at him with the exhausted expression of a man who had attended too much school.</p>
+      
+      <p>“Gideon. A pulsar beam is not a garden hose.”</p>
+      <p>“But it’s energy.”</p>
+      <p>“So is a nuclear explosion. You don’t put a windmill in one.”</p>
+      
+      <p class="aside">Gideon pointed excitedly out the window.</p>
+      
+      <p>“That thing emits more energy in a second than entire civilizations use in years!”</p>
+      <p>“Yes. That is precisely the problem.”</p>
+      
+      <p>Gideon grinned.</p>
+      <p>“We build giant collectors.”</p>
+      <p>“With what materials?”</p>
+      <p>“Strong materials.”</p>
+      
+      <p class="aside">Martin rubbed his visor.</p>
+      
+      <p>“The beam contains gamma rays, relativistic particles, magnetic fields strong enough to erase computer systems from orbit, and enough ionizing radiation to cook every living thing instantly if shielding fails.”</p>
+      <p>“So we use really good shielding.”</p>
+      
+      <p class="aside">Martin blinked.</p>
+      
+      <p>“Oh, really good shielding. Why didn’t astrophysics think of that?”</p>
+      
+      <p class="aside">Gideon ignored the sarcasm.</p>
+      
+      <p>“We park stations near the beam.”</p>
+      <p>“Near the beam, matter becomes optional.”</p>
+      <p>“We automate it.”</p>
+      <p>“The electronics would die.”</p>
+      <p>“We harden them.”</p>
+      <p>“The atoms themselves would file a complaint.”</p>
+      
+      <p class="aside">Gideon pointed accusingly.</p>
+      
+      <p>“You always crush innovation.”</p>
+      <p>“No, I crush hallucinations.”</p>
+
+      <span class="sfx">WHUMMMMMM.</span>
+
+      <p class="aside">The ship lights flickered.</p>
+      
+      <p>Martin gestured upward.</p>
+      <p>“That pulse alone probably induced currents in half our systems. You know what happens if you try to directly absorb pulsar radiation?”</p>
+      <p>“Unlimited power?”</p>
+      <p>“You vaporize.”</p>
+      <p>“Well maybe not directly directly.”</p>
+      
+      <p class="aside">Martin sighed.</p>
+      
+      <p>“A pulsar is a neutron star. Crushed stellar core. Twenty kilometers wide. Rotates absurdly fast. Magnetic field trillions of times stronger than Earth’s. The beam isn’t a flashlight, Gideon. It’s a relativistic particle jet from a dead star with anger issues.”</p>
+      
+      <p>Gideon nodded thoughtfully.</p>
+      <p>“So…”</p>
+      <p>“No.”</p>
+      <p>“But maybe—”</p>
+      <p>“No.”</p>
+      <p>“What if Helix funded—”</p>
+      
+      <p class="aside">Martin actually laughed.</p>
+      
+      <p>“Helix wouldn’t spend money installing decent toilets. You think they’re building megastructures around cosmic horrors?”</p>
+      
+      <p>Gideon folded his arms.</p>
+      <p>“You lack ambition.”</p>
+      <p>“You lack survival instinct.”</p>
+      
+      <p>A pause. Then Gideon snapped his fingers.</p>
+      
+      <p>“What if we market it as green energy?”</p>
+      
+      <p class="aside">Martin stared silently for five full seconds.</p>
+      
+      <p>“You are the dumbest visionary I have ever met.”</p>
+      <p>“Visionary.”</p>
+      <p>“I did not say that positively.”</p>
+      
+      <p class="aside">Gideon leaned back smugly.</p>
+      
+      <p>“One day they’ll call me a genius.”</p>
+      <p>“One day they’ll name a safety regulation after you.”</p>
+      
+      <p class="aside">The ship AI chimed in suddenly:</p>
+      <blockquote>
+        <div class="placard-label">AI Health & Wellness Alert</div>
+        <p>NOTE: Direct pulsar energy harvesting proposals have been automatically forwarded to psychiatric wellness screening.</p>
+      </blockquote>
+
+      <p>Martin pointed at the ceiling.</p>
+      <p>“See? Even the ship thinks you’re insane.”</p>
+      
+      <p class="aside">Gideon smiled dreamily out the window at the deadly violet world shrinking behind them.</p>
+      
+      <p>“Still,” he said softly, “imagine the electrical bill savings.”</p>
+      
+      <p class="aside">Martin closed his eyes.</p>
+      <p class="aside">For a brief moment, he considered opening the airlock.</p>
+
+    </article>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+      <div class="sidebar-card">
+        <div class="helix-logo">HELIX</div>
+        <div class="helix-slogan">Extractive Solutions™</div>
+        <p style="margin-top:12px;">Your productivity is our purpose. Your purpose is our productivity. Unauthorized optimism is logged and filed under Form 91-F (Emotional Deviation).</p>
+      </div>
+
+      <div class="sidebar-card">
+        <div class="card-label">Proposal Details</div>
+        <ul>
+          <li>Proposer <span>G. Vale</span></li>
+          <li>Concept <span>Pulsar Harvesting</span></li>
+          <li>Feasibility <span style="color:var(--warning);">Impossible</span></li>
+          <li>Destruction Rate <span>100%</span></li>
+          <li>Screening Status <span style="color:var(--caution);">Triggered</span></li>
+        </ul>
+      </div>
+
+      <div class="sidebar-card">
+        <div class="card-label">Pulsar Cycle Data</div>
+        <ul>
+          <li>Period <span>11 seconds</span></li>
+          <li>Radiation <span>Class VII</span></li>
+          <li>Suit alerts <span>Active</span></li>
+          <li>Humming <span style="color:var(--glow);">Confirmed</span></li>
+        </ul>
+      </div>
+
+    </aside>
+  </div>
+
+  <footer>
+    <div class="footer-inner">
+      <span>Unlimited Power &nbsp;·&nbsp; A Story</span>
+      <span>Transit &nbsp;·&nbsp; Yonkers &nbsp;·&nbsp; Orbit VII</span>
+    </div>
+  </footer>
+
+</body>
+</html>

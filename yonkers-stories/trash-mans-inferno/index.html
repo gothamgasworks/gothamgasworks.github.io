@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>The Trash Man's Inferno</title>
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="The Trash Man's Inferno">
+  <meta name="twitter:description" content="Barnaby Williams compacted a self-heating noodle canister. Then his truck exploded.">
+  <meta name="twitter:image" content="the_explosion.jpg">
+
+  <meta property="og:title" content="The Trash Man's Inferno">
+  <meta property="og:description" content="Barnaby Williams compacted a self-heating noodle canister. Then his truck exploded.">
+  <meta property="og:image" content="the_explosion.jpg">
+  <meta property="og:type" content="article">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:ital,wght@0,300;0,400;1,300&family=Playfair+Display:ital,wght@0,400;1,400;1,700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --dust:       #c4b8a8;
+      --void:       #0e0c0f;
+      --deep:       #16121a;
+      --panel:      #1e1824;
+      --violet:     #6b3fa0;
+      --violet-dim: #3d2260;
+      --glow:       #b07aff;
+      --caution:    #e8c44a;
+      --warning:    #d9472b;
+      --text:       #d4ccc8;
+      --muted:      #7a7068;
+      --rule:       #2e2838;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--void);
+      color: var(--text);
+      font-family: 'DM Mono', monospace;
+      font-weight: 300;
+      font-size: 15px;
+      line-height: 1.85;
+      overflow-x: hidden;
+    }
+
+    /* ─── GRAIN OVERLAY ─── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 999;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 256px;
+    }
+
+    /* ─── PULSAR SWEEP ANIMATION ─── */
+    @keyframes sweep {
+      0%   { transform: translateX(-110%) skewX(-8deg); opacity: 0; }
+      8%   { opacity: 1; }
+      92%  { opacity: 1; }
+      100% { transform: translateX(110%) skewX(-8deg); opacity: 0; }
+    }
+
+    .pulsar-sweep {
+      position: fixed;
+      top: 0; left: 0;
+      width: 180px; height: 100vh;
+      background: linear-gradient(90deg, transparent, rgba(176, 122, 255, 0.04), transparent);
+      pointer-events: none;
+      z-index: 1;
+      animation: sweep 11s ease-in-out infinite;
+    }
+
+    /* ─── HAZARD STRIPE HEADER ─── */
+    .hazard-bar {
+      width: 100%;
+      height: 6px;
+      background: repeating-linear-gradient(
+        -45deg,
+        var(--caution) 0px,
+        var(--caution) 12px,
+        var(--void) 12px,
+        var(--void) 24px
+      );
+      opacity: 0.85;
+    }
+
+    /* ─── MASTHEAD ─── */
+    .masthead {
+      position: relative;
+      background: var(--deep);
+      border-bottom: 1px solid var(--rule);
+      padding: 0 clamp(24px, 6vw, 80px);
+      overflow: hidden;
+    }
+
+    .masthead::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 120% at 60% 50%, rgba(107,63,160,0.18) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .masthead-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 40px;
+      padding: 48px 0 40px;
+    }
+
+    .publication-tag {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.35em;
+      color: var(--violet);
+      text-transform: uppercase;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .publication-tag::before {
+      content: '';
+      display: inline-block;
+      width: 24px;
+      height: 1px;
+      background: var(--violet);
+    }
+
+    h1.title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(52px, 9vw, 110px);
+      line-height: 0.92;
+      letter-spacing: 0.02em;
+      color: #f0ece8;
+      text-transform: uppercase;
+    }
+
+    h1.title .highlight {
+      color: var(--glow);
+      display: block;
+    }
+
+    .meta-block {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 10px;
+    }
+
+    .meta-item {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .meta-item strong {
+      color: var(--dust);
+      font-weight: 400;
+    }
+
+    .warning-badge {
+      display: inline-block;
+      background: var(--warning);
+      color: #fff;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 12px;
+      letter-spacing: 0.18em;
+      padding: 4px 12px;
+      margin-top: 6px;
+    }
+
+    /* ─── PLACARD ─── */
+    .placard-wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 36px clamp(24px, 6vw, 80px);
+    }
+
+    .placard {
+      border: 1px solid var(--violet-dim);
+      background: rgba(61, 34, 96, 0.22);
+      padding: 22px 28px;
+      position: relative;
+      max-width: 560px;
+    }
+
+    .placard::before {
+      content: '⚠';
+      position: absolute;
+      top: -1px; left: -1px;
+      font-size: 9px;
+      background: var(--violet-dim);
+      color: var(--glow);
+      padding: 3px 6px;
+      letter-spacing: 0.1em;
+    }
+
+    .placard-label {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 19px;
+      letter-spacing: 0.3em;
+      color: var(--caution);
+      margin-bottom: 10px;
+    }
+
+    .placard p {
+      font-size: 19px;
+      color: var(--dust);
+      line-height: 1.7;
+    }
+
+    /* ─── HERO IMAGE ─── */
+    .hero-image-wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 clamp(24px, 6vw, 80px) 0;
+      position: relative;
+    }
+
+    .hero-image-frame {
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: var(--panel);
+    }
+
+    .hero-image-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: saturate(0.7) contrast(1.1);
+    }
+
+    .hero-image-frame::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        transparent 40%,
+        rgba(14, 12, 15, 0.8) 100%
+      );
+    }
+
+    .hero-caption {
+      position: absolute;
+      bottom: 16px; left: clamp(24px, 6vw, 80px);
+      right: clamp(24px, 6vw, 80px);
+      z-index: 2;
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    /* ─── CONTENT LAYOUT ─── */
+    .content-wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 52px clamp(24px, 6vw, 80px) 80px;
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      gap: 64px;
+      align-items: start;
+    }
+
+    /* ─── STORY BODY ─── */
+    .story {
+      position: relative;
+    }
+
+    .story p {
+      margin-bottom: 1.5em;
+      color: var(--text);
+    }
+
+    /* Dialogue */
+    .story p > em,
+    .story em {
+      font-style: italic;
+      color: var(--dust);
+      font-family: 'Playfair Display', serif;
+      font-size: 16px;
+    }
+
+    /* Blockquotes (the warning placard in story) */
+    .story blockquote {
+      border-left: 2px solid var(--violet);
+      margin: 2em 0;
+      padding: 16px 24px;
+      background: rgba(107,63,160,0.12);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 18px;
+      letter-spacing: 0.22em;
+      color: var(--caution);
+      line-height: 1.6;
+    }
+
+    /* Section breaks */
+    .story hr {
+      border: none;
+      border-top: 1px solid var(--rule);
+      margin: 2.5em 0;
+    }
+
+    /* Sound effects */
+    .sfx {
+      display: block;
+      text-align: center;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      letter-spacing: 0.18em;
+      color: var(--violet-dim);
+      margin: 2em 0;
+      text-shadow: 0 0 40px #af7afff9;
+      text-shadow: 0 0 1px #cdabff, 0 0 1px #cdabff, 0 0 1px #cdabff, 0 0 1px #cdabff, 0 0 1px #cdabff;
+    }
+
+    /* Stage directions / narrator asides */
+    .aside {
+      font-size: 14px;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    /* ─── SIDEBAR ─── */
+    .sidebar {
+      position: sticky;
+      top: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .sidebar-card {
+      border: 1px solid var(--rule);
+      padding: 20px;
+      background: var(--panel);
+    }
+
+    .sidebar-card .card-label {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      color: var(--violet);
+      margin-bottom: 12px;
+      text-transform: uppercase;
+    }
+
+    .sidebar-card p,
+    .sidebar-card li {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .sidebar-card ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .sidebar-card li {
+      padding: 6px 0;
+      border-bottom: 1px solid var(--rule);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .sidebar-card li:last-child { border-bottom: none; }
+
+    .sidebar-card li span { color: var(--dust); }
+
+    .helix-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      letter-spacing: 0.2em;
+      color: var(--warning);
+      margin-bottom: 4px;
+    }
+
+    .helix-slogan {
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    /* ─── FADE-IN ANIMATION ─── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .masthead-inner,
+    .placard-wrap,
+    .hero-image-wrap,
+    .content-wrap {
+      animation: fadeUp 0.8s ease both;
+    }
+
+    .placard-wrap     { animation-delay: 0.15s; }
+    .hero-image-wrap  { animation-delay: 0.25s; }
+    .content-wrap     { animation-delay: 0.4s; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 760px) {
+      .masthead-inner { grid-template-columns: 1fr; }
+      .meta-block { align-items: flex-start; }
+      .content-wrap { grid-template-columns: 1fr; }
+      .sidebar { position: static; }
+      .hero-image-frame { aspect-ratio: 4 / 3; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="pulsar-sweep"></div>
+
+  <div class="hazard-bar"></div>
+
+  <!-- MASTHEAD -->
+  <header class="masthead">
+    <div class="masthead-inner">
+      <div>
+        <div class="publication-tag">Helix Extractive Solutions — Incident Report File</div>
+        <h1 class="title">
+          The Trash Man's
+          <span class="highlight">Inferno</span>
+        </h1>
+      </div>
+      <div class="meta-block">
+        <div class="meta-item">Sector <strong>Metro Sector &rarr; Yonkers</strong></div>
+        <div class="meta-item">Vehicle <strong>Deborah (Industrial Hauler)</strong></div>
+        <div class="meta-item">Orbit <strong>Neutron Class VII</strong></div>
+        <div class="meta-item">Pulsar Cycle <strong>11 sec</strong></div>
+        <div class="meta-item">Classification <strong>Compact Fire Event</strong></div>
+        <div class="warning-badge">Claim Denied</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO IMAGE -->
+  <div class="hero-image-wrap">
+    <div class="hero-image-frame">
+      <img src="the_explosion.jpg" alt="Industrial garbage truck Deborah exploding in six different colors as noodle broth and burning receipts fly into the air" />
+    </div>
+    <div class="hero-caption">
+      <span>Urban Metro Sector — Thursday Compaction Scene</span>
+      <span>© Williams Rapid Disposal. All rights compacted.</span>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="content-wrap">
+
+    <!-- STORY -->
+    <article class="story">
+
+      <p>Barnaby Williams ended up on Yonkers because of a garbage truck.</p>
+      <p>Not metaphorically.</p>
+      <p>An actual garbage truck.</p>
+      
+      <p>Barnaby owned exactly one vehicle and exactly one business: <em>Williams Rapid Disposal & Recycling</em>. Which sounded larger than it was.</p>
+      
+      <p>There was no “Williams.”</p>
+      <p>No “Rapid.”</p>
+      <p>And very little “Recycling.”</p>
+      
+      <p>Mostly it was Barnaby driving around in a battered industrial hauler named <em>Deborah</em> collecting trash from small restaurants too cheap to hire real waste contractors.</p>
+      <p>It wasn’t glamorous, but it was stable.</p>
+      <p>The truck smelled like hot metal and old bananas, but it was his.</p>
+      <p>Well. Mostly the bank’s. He still had six years left on the loan.</p>
+      
+      <p class="aside">Every morning he drove through the city before sunrise listening to old jazz and muttering at traffic.</p>
+      
+      <p>Then came the explosion.</p>
+      <p>To this day Barnaby maintained he was not legally responsible.</p>
+      <p>The restaurant owner absolutely disagreed.</p>
+      <p>It happened on a Thursday.</p>
+      
+      <p class="aside">A little fusion-noodle place called <em>Dragon Orbit Express</em> had improperly disposed of a prototype self-heating cooking canister. The canister was apparently not designed to be compacted with thirteen tons of municipal waste.</p>
+      
+      <p>Barnaby hit the compactor switch.</p>
+      <p>For one glorious second nothing happened.</p>
+      
+      <p class="aside">Then Deborah exploded like a patriotic holiday.</p>
+      <p class="aside">Not a massive explosion. More of a deeply personal explosion.</p>
+      <p class="aside">The compactor shot through the air, demolished a parking drone, shattered three windows, and embedded itself halfway into a frozen yogurt shop.</p>
+      
+      <p class="aside">The garbage truck itself caught fire in six different colors. Barnaby climbed out of the wreckage covered in noodle broth and burning receipts.</p>
+      
+      <p>Someone nearby screamed:</p>
+      <p>“THE TRASH MAN’S ON FIRE!”</p>
+      
+      <p>Barnaby looked down. He was, technically, on fire.</p>
+      
+      <p class="aside">A delivery drone filmed the whole thing. By evening it had twelve million views.</p>
+      <p class="aside">People added music. One version synced the explosion perfectly to a classical orchestra crescendo. Another added applause.</p>
+      <p class="aside">The most popular edit freeze-framed Barnaby stumbling from the flames while carrying a half-melted coffee thermos.</p>
+
+      <blockquote>
+        <div class="placard-label">Internet Meme</div>
+        <p>THIS MEETING COULD’VE BEEN AN EMAIL</p>
+      </blockquote>
+
+      <p>Barnaby became briefly internet famous against his will.</p>
+      <p>Unfortunately, internet fame did not repair Deborah.</p>
+      
+      <p class="aside">The insurance company investigated for exactly eleven minutes before denying the claim.</p>
+      <p class="aside"><em>Improper hazardous material classification.</em></p>
+      
+      <p>Dragon Orbit Express blamed Barnaby. Barnaby blamed Dragon Orbit Express. The city blamed both.</p>
+      <p>Meanwhile the bank wanted payments.</p>
+      <p>Barnaby tried everything. He picked up temporary jobs. Worked loading docks. Did overnight warehouse shifts. Sold half his furniture.</p>
+      
+      <p class="aside">For two months he slept in the tiny office attached to the ruined garage because he couldn’t afford rent and loan payments simultaneously. Still, the numbers kept getting worse.</p>
+      
+      <p>Then came the call.</p>
+      <p>“Mr. Williams,” said the pleasant voice, “Horizon Fidelity Financial would like to discuss restructuring options.”</p>
+      <p>Barnaby rubbed his eyes.</p>
+      <p>“Is this where you offer me some horrifying deal?”</p>
+      <p>A pause.</p>
+      <p>“We prefer the term <em>opportunity</em>.”</p>
+      <p>“Oh good. Worse somehow.”</p>
+      
+      <p class="aside">The woman explained the Debt Resolution Through Opportunity Program. Off-world contracts. High wages. Housing included. Accelerated debt repayment.</p>
+      
+      <p>“Mining?”</p>
+      <p>“Resource acquisition.”</p>
+      <p>“That means mining.”</p>
+      <p>“Technically.”</p>
+      <p>Barnaby sighed deeply.</p>
+      <p>“Where?”</p>
+      <p>“Outer colony designation YK-441.”</p>
+      <p>“That sounds terrible already.”</p>
+      <p>“It’s commonly called Yonkers.”</p>
+      
+      <p>Barnaby was silent. Then:</p>
+      <p>“Yonkers?”</p>
+      <p>“Yes.”</p>
+      <p>“Who named a death planet Yonkers?”</p>
+      <p>“Historical reasons.”</p>
+      <p>“That’s somehow more upsetting.”</p>
+
+      <p class="aside">He almost refused. Almost. But the numbers didn’t care about pride.</p>
+      <p class="aside">Three weeks later Barnaby sat aboard a Helix transport shuttle holding a duffel bag containing all remaining possessions not destroyed, sold, repossessed, or noodle-contaminated.</p>
+      <p class="aside">Across from him sat a skinny man reading a luxury boating magazine. Barnaby narrowed his eyes.</p>
+      
+      <p>“You look familiar.”</p>
+      <p class="aside">The man lowered the magazine.</p>
+      <p>“Oh no.”</p>
+      <p>“You’re Hoverboat Guy.”</p>
+      
+      <p>Andrew Sternkern pointed accusingly.</p>
+      <p>“You’re Trash Explosion Guy!”</p>
+      
+      <p class="aside">The shuttle cabin went quiet. A passenger nearby gasped: “Wait, <em>the</em> Trash Explosion Guy?”</p>
+      <p class="aside">Barnaby buried his face in his hands.</p>
+      
+      <p>Andrew leaned forward excitedly.</p>
+      <p>“Buddy, the clip where you walk out of the fire holding coffee? Legendary.”</p>
+      <p>“It was a terrible day.”</p>
+      <p>“You looked cool though.”</p>
+      <p>“I had second-degree burns.”</p>
+      <p>“Cool burns.”</p>
+      
+      <p class="aside">Barnaby groaned.</p>
+      <p class="aside">The orientation video flickered on: <em>“Welcome to the Helix family!”</em></p>
+      
+      <p>Andrew whispered:</p>
+      <p>“This video gets worse every time.”</p>
+      
+      <p>Barnaby looked out the tiny shuttle window toward the stars.</p>
+      <p>“You know what really gets me?”</p>
+      <p>“What?”</p>
+      <p>“I did everything right.”</p>
+      
+      <p class="aside">Andrew thought about that, then nodded slowly. “Yeah.” That actually shut him up for a moment.</p>
+      
+      <p class="aside">The shuttle descended toward Yonkers. Purple light washed over the cabin.</p>
+
+      <span class="sfx">WHUMMMMMM.</span>
+
+      <p class="aside">The pulsar beam rolled across the planet below like the universe grinding its teeth.</p>
+      <p class="aside">Barnaby stared at the mining colonies in the distance. Endless machinery. Drilling towers. Tiny crawling lights.</p>
+      <p class="aside">Then he looked down at the debt statement on his wrist display. At the bottom, in microscopic text:</p>
+      <p class="aside"><em>Horizon Fidelity Financial is a wholly owned subsidiary of Helix Extractive Solutions.</em></p>
+      
+      <p>Barnaby blinked slowly. Then looked upward toward absolutely nobody in particular and said:</p>
+      <p>“You know, I really hope there’s a Hell.”</p>
+      <p>Andrew glanced over. “Why?”</p>
+      <p>“So whoever invented corporate subsidiaries has somewhere to go.”</p>
+
+    </article>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+      <div class="sidebar-card">
+        <div class="helix-logo">HELIX</div>
+        <div class="helix-slogan">Extractive Solutions™</div>
+        <p style="margin-top:12px;">Your productivity is our purpose. Your purpose is our productivity. Unauthorized optimism is logged and filed under Form 91-F (Emotional Deviation).</p>
+      </div>
+
+      <div class="sidebar-card">
+        <div class="card-label">Incident File</div>
+        <ul>
+          <li>Driver <span>B. Williams</span></li>
+          <li>Company <span>Rapid Disposal</span></li>
+          <li>Asset <span>Deborah (Ruined)</span></li>
+          <li>Viral Views <span>12,000,000</span></li>
+          <li>Status <span style="color: var(--warning);">Foreclosed</span></li>
+        </ul>
+      </div>
+
+      <div class="sidebar-card">
+        <div class="card-label">Pulsar Cycle Data</div>
+        <ul>
+          <li>Period <span>11 seconds</span></li>
+          <li>Radiation <span>Class VII</span></li>
+          <li>Suit alerts <span>Active</span></li>
+          <li>Humming <span style="color:var(--glow);">Confirmed</span></li>
+        </ul>
+      </div>
+
+    </aside>
+  </div>
+
+  <footer>
+    <div class="footer-inner">
+      <span>The Trash Man's Inferno &nbsp;·&nbsp; A Story</span>
+      <span>Transit &nbsp;·&nbsp; Yonkers &nbsp;·&nbsp; Orbit VII</span>
+    </div>
+  </footer>
+
+</body>
+</html>

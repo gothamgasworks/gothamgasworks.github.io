@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gotham Gasworks — Selected Stories</title>
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Gotham Gasworks — Selected Stories">
+  <meta name="twitter:description" content="A landing portal for static speculative fiction anthologies and speculative writing.">
+
+  <meta property="og:title" content="Gotham Gasworks — Selected Stories">
+  <meta property="og:description" content="A landing portal for static speculative fiction anthologies and speculative writing.">
+  <meta property="og:type" content="website">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:ital,wght@0,300;0,400;1,300&family=Playfair+Display:ital,wght@0,400;1,400;1,700&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --dust:       #c4b8a8;
+      --void:       #0a080c;
+      --deep:       #120e17;
+      --panel:      #1a1421;
+      --violet:     #5e358c;
+      --glow:       #9f62f2;
+      --caution:    #dfbc44;
+      --text:       #e0d9d5;
+      --muted:      #6e645c;
+      --rule:       #262030;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--void);
+      color: var(--text);
+      font-family: 'Outfit', sans-serif;
+      font-weight: 300;
+      font-size: 16px;
+      line-height: 1.8;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* ─── FILM GRAIN OVERLAY ─── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 999;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 256px;
+    }
+
+    /* ─── DYNAMIC BACKGROUND GLOWS ─── */
+    .bg-glow {
+      position: fixed;
+      top: -20%; left: -10%;
+      width: 60vw; height: 60vw;
+      background: radial-gradient(circle, rgba(94, 53, 140, 0.12) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .bg-glow-2 {
+      position: fixed;
+      bottom: -10%; right: -10%;
+      width: 50vw; height: 50vw;
+      background: radial-gradient(circle, rgba(159, 98, 242, 0.06) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ─── HERO HEADER ─── */
+    header {
+      position: relative;
+      z-index: 1;
+      padding: 100px 24px 60px;
+      text-align: center;
+      border-bottom: 1px solid var(--rule);
+      background: linear-gradient(to bottom, var(--deep), var(--void));
+    }
+
+    .logo-container {
+      margin-bottom: 24px;
+    }
+
+    .logo-text {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(48px, 8vw, 100px);
+      letter-spacing: 0.08em;
+      line-height: 0.9;
+      color: #fff;
+      text-transform: uppercase;
+      display: inline-block;
+    }
+
+    .logo-text span {
+      color: var(--glow);
+    }
+
+    .subtitle {
+      font-family: 'DM Mono', monospace;
+      font-size: 13px;
+      letter-spacing: 0.35em;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-top: 12px;
+    }
+
+    /* ─── CONTAINER ─── */
+    main {
+      flex-grow: 1;
+      position: relative;
+      z-index: 1;
+      max-width: 1000px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 60px 24px 100px;
+    }
+
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 24px;
+      letter-spacing: 0.2em;
+      color: var(--dust);
+      text-transform: uppercase;
+      margin-bottom: 40px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .section-title::after {
+      content: '';
+      flex-grow: 1;
+      height: 1px;
+      background: var(--rule);
+    }
+
+    /* ─── PORTAL GRID ─── */
+    .portal-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+
+    /* ─── UNIVERSE CARD ─── */
+    .universe-card {
+      background: var(--panel);
+      border: 1px solid var(--rule);
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .universe-card:hover {
+      border-color: var(--violet);
+      box-shadow: 0 10px 40px rgba(94, 53, 140, 0.15);
+    }
+
+    .card-banner {
+      background: linear-gradient(135deg, var(--deep) 0%, rgba(94, 53, 140, 0.4) 100%);
+      padding: 60px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      border-right: 1px solid var(--rule);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card-banner::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 30% 30%, rgba(159, 98, 242, 0.2) 0%, transparent 80%);
+      pointer-events: none;
+    }
+
+    .universe-tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.25em;
+      color: var(--glow);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .universe-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(36px, 5vw, 64px);
+      line-height: 1;
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+
+    .card-details {
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .card-desc {
+      font-size: 14px;
+      color: var(--dust);
+      line-height: 1.8;
+      margin-bottom: 24px;
+    }
+
+    .card-desc p {
+      margin-bottom: 12px;
+    }
+
+    .card-desc p:last-child {
+      margin-bottom: 0;
+    }
+
+    .card-action {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 18px;
+      letter-spacing: 0.15em;
+      color: var(--glow);
+      text-transform: uppercase;
+      margin-top: auto;
+      transition: color 0.3s ease;
+    }
+
+    .universe-card:hover .card-action {
+      color: #fff;
+    }
+
+    .card-action::after {
+      content: '→';
+      display: inline-block;
+      transition: transform 0.3s ease;
+    }
+
+    .universe-card:hover .card-action::after {
+      transform: translateX(6px);
+    }
+
+    /* ─── PENDING PORTAL ─── */
+    .pending-card {
+      background: var(--void);
+      border: 1px dashed var(--rule);
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      min-height: 240px;
+      position: relative;
+    }
+
+    .pending-icon {
+      font-size: 24px;
+      color: var(--muted);
+      margin-bottom: 16px;
+      letter-spacing: 0.1em;
+    }
+
+    .pending-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      letter-spacing: 0.15em;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .pending-desc {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+      max-width: 320px;
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      position: relative;
+      z-index: 1;
+      border-top: 1px solid var(--rule);
+      background: var(--deep);
+      padding: 30px 24px;
+    }
+
+    .footer-inner {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-inner span {
+      font-size: 11px;
+      font-family: 'DM Mono', monospace;
+      color: var(--muted);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    /* ─── FADE-IN ANIMATION ─── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    header, main {
+      animation: fadeUp 0.8s ease both;
+    }
+
+    main { animation-delay: 0.2s; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 768px) {
+      .universe-card {
+        grid-template-columns: 1fr;
+      }
+      .card-banner {
+        border-right: none;
+        border-bottom: 1px solid var(--rule);
+        padding: 40px 24px;
+      }
+      .card-details {
+        padding: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-glow"></div>
+  <div class="bg-glow-2"></div>
+
+  <div class="hazard-bar"></div>
+
+  <!-- MAIN PORTAL HEADER -->
+  <header>
+    <div class="logo-container">
+      <div class="logo-text">Gotham<span>Gasworks</span></div>
+      <div class="subtitle">Speculative Fiction Archives</div>
+    </div>
+  </header>
+
+  <!-- PORTAL CONTENTS -->
+  <main>
+    <div class="section-title">Active Universes</div>
+
+    <div class="portal-grid">
+      
+      <!-- Featured Universe: Yonkers Veil -->
+      <a href="yonkers-stories/" class="universe-card">
+        <div class="card-banner">
+          <div class="universe-tag">Collection I</div>
+          <h2 class="universe-title">The Yonkers Veil</h2>
+        </div>
+        <div class="card-details">
+          <div class="card-desc">
+            <p>Five stories set on planet Yonkers, a resource-rich mining death-trap orbiting a neutron star Class VII.</p>
+            <p>Read about desperate laborers, unhinged optimistic surveyors, viral compactor accidents, and the corporate reach of Helix Extractive Solutions.</p>
+          </div>
+          <div class="card-action">Enter Sector YK-441</div>
+        </div>
+      </a>
+
+      <!-- Open Door / Placeholder for future universes -->
+      <div class="pending-card">
+        <div class="pending-icon">░░░ [LOCKED] ░░░</div>
+        <h3 class="pending-title">Future Universe</h3>
+        <p class="pending-desc">System listening for coordinates. Leave the airlock open; new realities incoming.</p>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- PORTAL FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <span>Gotham Gasworks Anthology</span>
+      <span>Static Server Online</span>
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>First Contact</title>
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="First Contact">
+  <meta name="twitter:description" content="Gideon Vale and Martin Krake land on Yonkers for the first time.">
+  <meta name="twitter:image" content="taking_samples.jpg">
+
+  <meta property="og:title" content="First Contact">
+  <meta property="og:description" content="Gideon Vale and Martin Krake land on Yonkers for the first time.">
+  <meta property="og:image" content="taking_samples.jpg">
+  <meta property="og:type" content="article">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:ital,wght@0,300;0,400;1,300&family=Playfair+Display:ital,wght@0,400;1,400;1,700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --dust:       #c4b8a8;
+      --void:       #0e0c0f;
+      --deep:       #16121a;
+      --panel:      #1e1824;
+      --violet:     #6b3fa0;
+      --violet-dim: #3d2260;
+      --glow:       #b07aff;
+      --caution:    #e8c44a;
+      --warning:    #d9472b;
+      --text:       #d4ccc8;
+      --muted:      #7a7068;
+      --rule:       #2e2838;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--void);
+      color: var(--text);
+      font-family: 'DM Mono', monospace;
+      font-weight: 300;
+      font-size: 15px;
+      line-height: 1.85;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 999;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 256px;
+    }
+
+    @keyframes sweep {
+      0%   { transform: translateX(-110%) skewX(-8deg); opacity: 0; }
+      8%   { opacity: 1; }
+      92%  { opacity: 1; }
+      100% { transform: translateX(110%) skewX(-8deg); opacity: 0; }
+    }
+
+    .pulsar-sweep {
+      position: fixed;
+      top: 0; left: 0;
+      width: 180px; height: 100vh;
+      background: linear-gradient(90deg, transparent, rgba(176, 122, 255, 0.04), transparent);
+      pointer-events: none;
+      z-index: 1;
+      animation: sweep 11s ease-in-out infinite;
+    }
+
+    .hazard-bar {
+      width: 100%;
+      height: 6px;
+      background: repeating-linear-gradient(
+        -45deg,
+        var(--caution) 0px,
+        var(--caution) 12px,
+        var(--void) 12px,
+        var(--void) 24px
+      );
+      opacity: 0.85;
+    }
+
+    .masthead {
+      position: relative;
+      background: var(--deep);
+      border-bottom: 1px solid var(--rule);
+      padding: 0 clamp(24px, 6vw, 80px);
+      overflow: hidden;
+    }
+
+    .masthead::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 120% at 60% 50%, rgba(107,63,160,0.18) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .masthead-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 40px;
+      padding: 48px 0 40px;
+    }
+
+    .publication-tag {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.35em;
+      color: var(--violet);
+      text-transform: uppercase;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .publication-tag::before {
+      content: '';
+      display: inline-block;
+      width: 24px;
+      height: 1px;
+      background: var(--violet);
+    }
+
+    h1.title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(52px, 9vw, 110px);
+      line-height: 0.92;
+      letter-spacing: 0.02em;
+      color: #f0ece8;
+      text-transform: uppercase;
+    }
+
+    h1.title .highlight {
+      color: var(--glow);
+      display: block;
+    }
+
+    .meta-block {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 10px;
+    }
+
+    .meta-item {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .meta-item strong {
+      color: var(--dust);
+      font-weight: 400;
+    }
+
+    .warning-badge {
+      display: inline-block;
+      background: var(--warning);
+      color: #fff;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 12px;
+      letter-spacing: 0.18em;
+      padding: 4px 12px;
+      margin-top: 6px;
+    }
+
+    .placard-wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 36px clamp(24px, 6vw, 80px);
+    }
+
+    .placard {
+      border: 1px solid var(--violet-dim);
+      background: rgba(61, 34, 96, 0.22);
+      padding: 22px 28px;
+      position: relative;
+      max-width: 560px;
+    }
+
+    .placard::before {
+      content: '⚠';
+      position: absolute;
+      top: -1px; left: -1px;
+      font-size: 9px;
+      background: var(--violet-dim);
+      color: var(--glow);
+      padding: 3px 6px;
+      letter-spacing: 0.1em;
+    }
+
+    .placard-label {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 19px;
+      letter-spacing: 0.3em;
+      color: var(--caution);
+      margin-bottom: 10px;
+    }
+
+    .placard p {
+      font-size: 19px;
+      color: var(--dust);
+      line-height: 1.7;
+    }
+
+    /* ─── HERO IMAGE ─── */
+    .hero-image-wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 clamp(24px, 6vw, 80px) 0;
+      position: relative;
+    }
+
+    .hero-image-frame {
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: var(--panel);
+    }
+
+    .hero-image-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: saturate(0.7) contrast(1.1);
+    }
+
+    .hero-image-frame::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        transparent 40%,
+        rgba(14, 12, 15, 0.8) 100%
+      );
+    }
+
+    .hero-caption {
+      position: absolute;
+      bottom: 16px; left: clamp(24px, 6vw, 80px);
+      right: clamp(24px, 6vw, 80px);
+      z-index: 2;
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .content-wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 52px clamp(24px, 6vw, 80px) 80px;
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      gap: 64px;
+      align-items: start;
+    }
+
+    .story {
+      position: relative;
+    }
+
+    .story p {
+      margin-bottom: 1.5em;
+      color: var(--text);
+    }
+
+    .story p > em,
+    .story em {
+      font-style: italic;
+      color: var(--dust);
+      font-family: 'Playfair Display', serif;
+      font-size: 16px;
+    }
+
+    .story blockquote {
+      border-left: 2px solid var(--violet);
+      margin: 2em 0;
+      padding: 16px 24px;
+      background: rgba(107,63,160,0.12);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 18px;
+      letter-spacing: 0.22em;
+      color: var(--caution);
+      line-height: 1.6;
+    }
+
+    .story hr {
+      border: none;
+      border-top: 1px solid var(--rule);
+      margin: 2.5em 0;
+    }
+
+    .sfx {
+      display: block;
+      text-align: center;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      letter-spacing: 0.18em;
+      color: var(--violet-dim);
+      margin: 2em 0;
+      text-shadow: 0 0 40px #af7afff9;
+      text-shadow: 0 0 1px #cdabff, 0 0 1px #cdabff, 0 0 1px #cdabff, 0 0 1px #cdabff, 0 0 1px #cdabff;
+    }
+
+    .aside {
+      font-size: 14px;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .sidebar-card {
+      border: 1px solid var(--rule);
+      padding: 20px;
+      background: var(--panel);
+    }
+
+    .sidebar-card .card-label {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      color: var(--violet);
+      margin-bottom: 12px;
+      text-transform: uppercase;
+    }
+
+    .sidebar-card p,
+    .sidebar-card li {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .sidebar-card ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .sidebar-card li {
+      padding: 6px 0;
+      border-bottom: 1px solid var(--rule);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .sidebar-card li:last-child { border-bottom: none; }
+
+    .sidebar-card li span { color: var(--dust); }
+
+    .helix-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      letter-spacing: 0.2em;
+      color: var(--warning);
+      margin-bottom: 4px;
+    }
+
+    .helix-slogan {
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .masthead-inner,
+    .hero-image-wrap,
+    .content-wrap {
+      animation: fadeUp 0.8s ease both;
+    }
+
+    .hero-image-wrap  { animation-delay: 0.25s; }
+    .content-wrap     { animation-delay: 0.4s; }
+
+    @media (max-width: 760px) {
+      .masthead-inner { grid-template-columns: 1fr; }
+      .meta-block { align-items: flex-start; }
+      .content-wrap { grid-template-columns: 1fr; }
+      .sidebar { position: static; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="pulsar-sweep"></div>
+
+  <div class="hazard-bar"></div>
+
+  <!-- MASTHEAD -->
+  <header class="masthead">
+    <div class="masthead-inner">
+      <div>
+        <div class="publication-tag">Helix Extractive Solutions — Survey File 01-A</div>
+        <h1 class="title">
+          First
+          <span class="highlight">Contact</span>
+        </h1>
+      </div>
+      <div class="meta-block">
+        <div class="meta-item">Sector <strong>Uncharted (YK-441)</strong></div>
+        <div class="meta-item">Vessel <strong>Prospect of Earnings</strong></div>
+        <div class="meta-item">Orbit <strong>Neutron Class VII</strong></div>
+        <div class="meta-item">Pulsar Cycle <strong>11 sec</strong></div>
+        <div class="meta-item">Classification <strong>Landfall Survey</strong></div>
+        <div class="warning-badge">Atmosphere Not Found</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO IMAGE -->
+  <div class="hero-image-wrap">
+    <div class="hero-image-frame">
+      <img src="taking_samples.jpg" alt="Surveyors Gideon Vale and Martin Krake on the surface of Yonkers taking mineral samples from a glowing formation" />
+    </div>
+    <div class="hero-caption">
+      <span>YK-441 Mining Surface — First Landfall Site</span>
+      <span>© Helix Extractive Solutions. Resource division active.</span>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="content-wrap">
+
+    <!-- STORY -->
+    <article class="story">
+
+      <p class="aside">The shuttle descended through a storm of violet static while the onboard computer calmly announced:</p>
+      <blockquote>
+        <div class="placard-label">Navigation Computer Alert</div>
+        <p>WARNING: LOCAL SPACE-TIME CONDITIONS MAY CAUSE CLOCK DRIFT, HAIR LOSS, AND SPONTANEOUS PHILOSOPHY.</p>
+      </blockquote>
+
+      <p>The pilot muted it.</p>
+      
+      <p class="aside">The planet below was barren, black, and glowing faintly purple where the pulsar beam skimmed the horizon. Every few seconds, invisible radiation crackled through the thin dust fields and made the landing gear whine like nervous dogs.</p>
+      
+      <p class="aside">The shuttle touched down with a metallic thunk.</p>
+      <p class="aside">For a moment, nothing happened.</p>
+      <p class="aside">Then the hatch opened.</p>
+      <p class="aside">Two men stepped onto the surface.</p>
+
+      <p>Gideon Vale spread his arms dramatically.</p>
+      <p>“Beautiful.”</p>
+      
+      <p>Martin Krake immediately checked his dosimeter.</p>
+      <p>“It’s trying to kill us.”</p>
+
+      <p class="aside">The landscape stretched endlessly in every direction — jagged obsidian rocks, violet sand, silver electrical storms dancing silently across the sky. Above them, the pulsar beam flashed once across the heavens like God taking a photograph.</p>
+      
+      <span class="sfx">WHUMMMMMM.</span>
+
+      <p class="aside">Their suits vibrated.</p>
+      
+      <p>Gideon stared out across the horizon with misty-eyed wonder.</p>
+      <p>“Can’t you see it, Martin?”</p>
+      <p>“I can see three forms of radiation.”</p>
+      <p>“Someday there’ll be cities here.”</p>
+      <p>“There’ll be extraction pits.”</p>
+      <p>“Families.”</p>
+      <p>“Debt laborers.”</p>
+      <p>“Children running through the purple dunes.”</p>
+      <p>“Children with thyroid tumors.”</p>
+
+      <p class="aside">Gideon ignored him and walked forward, boots crunching in the dust.</p>
+      
+      <p>“They’ll build parks.”</p>
+      <p>“They’ll build barracks.”</p>
+      <p>“Restaurants!”</p>
+      <p>“Protein dispensaries.”</p>
+      <p>“Schools.”</p>
+      <p>“Mandatory corporate training centers.”</p>
+
+      <p>Gideon turned around.</p>
+      <p>“You have absolutely no vision.”</p>
+      
+      <p>Martin pointed at the sky.</p>
+      <p>“The sky screams every eleven seconds.”</p>
+      
+      <p class="aside">As if on cue:</p>
+
+      <span class="sfx">WHUMMMMMM.</span>
+
+      <p class="aside">Their suit alarms chirped in despair.</p>
+      <p>Gideon continued smiling anyway.</p>
+      
+      <p>“Auroras.”</p>
+      <p>“There’s no atmosphere.”</p>
+      <p>“We can add one.”</p>
+      <p>“With what money?”</p>
+      <p>“The corporation’s.”</p>
+
+      <p>Martin stared at him.</p>
+      <p>“You think Helix Extractive Solutions is gonna spend trillions terraforming a death marble next to a pulsar?”</p>
+      <p>“They could diversify.”</p>
+      <p>“They sell synthetic shovel lubricant.”</p>
+
+      <p class="aside">Gideon crouched and picked up a glowing rock.</p>
+      
+      <p>“This place feels important.”</p>
+      
+      <p>Martin scanned the rock.</p>
+      <p>“It’s radioactive.”</p>
+      <p>“History starts in places like this.”</p>
+      <p>“History starts because some executive saw a graph go upward.”</p>
+
+      <p class="aside">The shuttle’s cargo drone rolled down the ramp carrying a folding sign. It unfolded automatically.</p>
+      
+      <blockquote>
+        <div class="placard-label">HELIX EXTRACTIVE SOLUTIONS</div>
+        <p>“We Reach Beyond Tomorrow.”</p>
+        <p style="font-size: 12px; margin-top: 8px; color: var(--muted);">All employees waive the right to tomorrow.</p>
+      </blockquote>
+
+      <p>Martin nodded toward it.</p>
+      <p>“There’s your future civilization.”</p>
+      
+      <p>Gideon looked around dreamily.</p>
+      <p>“You know what I think?”</p>
+      <p>“I’m about to.”</p>
+      <p>“I think one day people will come here willingly.”</p>
+      
+      <p class="aside">Martin barked a laugh so sudden it fogged his visor.</p>
+      
+      <p>“Willingly?”</p>
+      <p>“Sure. Adventurers. Homesteaders. Families looking for a fresh start.”</p>
+      <p>“Buddy, the only people coming here are gonna be people with seventeen percent interest loans and criminal records.”</p>
+      <p>“You’re cynical.”</p>
+      <p>“I’m observant.”</p>
+
+      <p class="aside">The pulsar beam swept overhead again.</p>
+
+      <span class="sfx">WHUMMMMMM.</span>
+
+      <p class="aside">Somewhere nearby, a rock exploded for no obvious reason.</p>
+      
+      <p>Gideon pointed excitedly.</p>
+      <p>“See? Geological activity!”</p>
+      <p>“That was radiation.”</p>
+      <p>“Still exciting.”</p>
+
+      <p class="aside">Martin walked a few paces away and planted a survey beacon into the ground. The beacon activated with a cheerful chime:</p>
+      
+      <p><em>“WELCOME, PIONEERS!”</em></p>
+      
+      <p class="aside">Then a second message appeared underneath:</p>
+      <p class="aside"><em>“MINIMUM LIFE EXPECTANCY ESTIMATE UPDATED.”</em></p>
+      
+      <p>Martin sighed.</p>
+      
+      <p class="aside">Gideon meanwhile had climbed onto a boulder and was staring into the distance like a prophet who had hit his head recently.</p>
+      
+      <p>“One day,” he said softly, “there’ll be streets here.”</p>
+      
+      <p>Martin pulled out a scanner.</p>
+      <p>“One day there’ll be twelve-hour mining shifts and a vending machine that charges subscription fees.”</p>
+      <p>“There’ll be music.”</p>
+      <p>“There’ll be union suppression.”</p>
+      <p>“There’ll be hope.”</p>
+      <p>“There’ll be mandatory optimism seminars.”</p>
+
+      <p>Gideon looked offended.</p>
+      <p>“You reduce everything to capitalism.”</p>
+      
+      <p>Martin gestured broadly at the shuttle, the survey equipment, the corporate logos, the orbital refinery visible overhead.</p>
+      <p>“We literally work for Helix.”</p>
+      
+      <p>A pause.</p>
+      <p>“...Fair.”</p>
+
+      <p class="aside">The shuttle AI crackled over their comms.</p>
+      <p><em>“Preliminary mineral scan complete.”</em></p>
+      
+      <p>Martin checked his tablet. Then checked it again. His eyebrows rose slightly.</p>
+      
+      <p>“Well.”</p>
+      
+      <p>Gideon grinned. “What?”</p>
+      <p>“We just became extremely popular with upper management.”</p>
+      <p>“How rich are we talking?”</p>
+      
+      <p>Martin stared at the numbers.</p>
+      <p>“Enough that they’ll ruin this planet forever.”</p>
+
+      <p class="aside">Gideon looked back over the endless violet wasteland. The silent storms. The pulsar glow. The beautiful deadly emptiness. And smiled.</p>
+      
+      <p>“You know,” he said, “I still think kids would love it here.”</p>
+      
+      <p>Martin looked at him for a very long moment. Then quietly said:</p>
+      <p>“You’re the reason warning labels exist.”</p>
+
+    </article>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+      <div class="sidebar-card">
+        <div class="helix-logo">HELIX</div>
+        <div class="helix-slogan">Extractive Solutions™</div>
+        <p style="margin-top:12px;">Your productivity is our purpose. Your purpose is our productivity. Unauthorized optimism is logged and filed under Form 91-F (Emotional Deviation).</p>
+      </div>
+
+      <div class="sidebar-card">
+        <div class="card-label">Survey Details</div>
+        <ul>
+          <li>Designation <span>YK-441</span></li>
+          <li>Lead Surveyor <span>G. Vale</span></li>
+          <li>Science Officer <span>M. Krake</span></li>
+          <li>Mineral Scan <span style="color:var(--glow);">Hyper-Rich</span></li>
+          <li>Habitability <span style="color:var(--warning);">Class Zero</span></li>
+        </ul>
+      </div>
+
+      <div class="sidebar-card">
+        <div class="card-label">Pulsar Cycle Data</div>
+        <ul>
+          <li>Period <span>11 seconds</span></li>
+          <li>Radiation <span>Class VII</span></li>
+          <li>Suit alerts <span>Active</span></li>
+          <li>Humming <span style="color:var(--glow);">Confirmed</span></li>
+        </ul>
+      </div>
+
+    </aside>
+  </div>
+
+  <footer>
+    <div class="footer-inner">
+      <span>First Contact &nbsp;·&nbsp; A Story</span>
+      <span>YK-441 &nbsp;·&nbsp; Yonkers &nbsp;·&nbsp; Orbit VII</span>
+    </div>
+  </footer>
+
+</body>
+</html>

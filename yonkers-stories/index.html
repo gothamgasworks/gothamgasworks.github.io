@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>The Yonkers Veil — Stories from YK-441</title>
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="The Yonkers Veil">
+  <meta name="twitter:description" content="A collection of stories about desperate people, unhinged optimists, and corporate hell on Yonkers.">
+
+  <meta property="og:title" content="The Yonkers Veil">
+  <meta property="og:description" content="A collection of stories about desperate people, unhinged optimists, and corporate hell on Yonkers.">
+  <meta property="og:type" content="website">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:ital,wght@0,300;0,400;1,300&family=Playfair+Display:ital,wght@0,400;1,400;1,700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --dust:       #c4b8a8;
+      --void:       #0e0c0f;
+      --deep:       #16121a;
+      --panel:      #1e1824;
+      --violet:     #6b3fa0;
+      --violet-dim: #3d2260;
+      --glow:       #b07aff;
+      --caution:    #e8c44a;
+      --warning:    #d9472b;
+      --text:       #d4ccc8;
+      --muted:      #7a7068;
+      --rule:       #2e2838;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--void);
+      color: var(--text);
+      font-family: 'DM Mono', monospace;
+      font-weight: 300;
+      font-size: 15px;
+      line-height: 1.85;
+      overflow-x: hidden;
+    }
+
+    /* ─── GRAIN OVERLAY ─── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 999;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 256px;
+    }
+
+    /* ─── PULSAR SWEEP ANIMATION ─── */
+    @keyframes sweep {
+      0%   { transform: translateX(-110%) skewX(-8deg); opacity: 0; }
+      8%   { opacity: 1; }
+      92%  { opacity: 1; }
+      100% { transform: translateX(110%) skewX(-8deg); opacity: 0; }
+    }
+
+    .pulsar-sweep {
+      position: fixed;
+      top: 0; left: 0;
+      width: 180px; height: 100vh;
+      background: linear-gradient(90deg, transparent, rgba(176, 122, 255, 0.04), transparent);
+      pointer-events: none;
+      z-index: 1;
+      animation: sweep 11s ease-in-out infinite;
+    }
+
+    /* ─── HAZARD STRIPE ─── */
+    .hazard-bar {
+      width: 100%;
+      height: 6px;
+      background: repeating-linear-gradient(
+        -45deg,
+        var(--caution) 0px,
+        var(--caution) 12px,
+        var(--void) 12px,
+        var(--void) 24px
+      );
+      opacity: 0.85;
+    }
+
+    /* ─── MASTHEAD ─── */
+    .masthead {
+      position: relative;
+      background: var(--deep);
+      border-bottom: 1px solid var(--rule);
+      padding: 60px clamp(24px, 6vw, 80px);
+      overflow: hidden;
+      text-align: center;
+    }
+
+    .masthead::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 50%, rgba(107,63,160,0.18) 0%, transparent 75%);
+      pointer-events: none;
+    }
+
+    .masthead-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .publication-tag {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 13px;
+      letter-spacing: 0.4em;
+      color: var(--violet);
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .publication-tag::before,
+    .publication-tag::after {
+      content: '';
+      display: inline-block;
+      width: 32px;
+      height: 1px;
+      background: var(--violet);
+    }
+
+    h1.main-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(52px, 8vw, 120px);
+      line-height: 0.9;
+      letter-spacing: 0.03em;
+      color: #f0ece8;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+
+    h1.main-title .highlight {
+      color: var(--glow);
+    }
+
+    .intro-box {
+      max-width: 720px;
+      margin: 0 auto;
+      border: 1px solid var(--violet-dim);
+      background: rgba(61, 34, 96, 0.15);
+      padding: 24px 30px;
+      text-align: left;
+      position: relative;
+    }
+
+    .intro-box::before {
+      content: '⚠';
+      position: absolute;
+      top: -1px; left: -1px;
+      font-size: 9px;
+      background: var(--violet-dim);
+      color: var(--glow);
+      padding: 3px 6px;
+    }
+
+    .intro-box p {
+      font-size: 15px;
+      color: var(--dust);
+      line-height: 1.7;
+      margin-bottom: 12px;
+    }
+
+    .intro-box p:last-child {
+      margin-bottom: 0;
+    }
+
+    .intro-box em {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      color: var(--glow);
+    }
+
+    /* ─── GRID CONTAINER ─── */
+    .grid-wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 60px clamp(24px, 6vw, 80px) 100px;
+    }
+
+    .story-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 36px;
+    }
+
+    /* ─── STORY CARD ─── */
+    .story-card {
+      background: var(--panel);
+      border: 1px solid var(--rule);
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .story-card:hover {
+      border-color: var(--violet);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 30px rgba(107, 63, 160, 0.15);
+    }
+
+    .card-image-frame {
+      aspect-ratio: 16 / 9;
+      background: var(--deep);
+      overflow: hidden;
+      position: relative;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .card-image-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: saturate(0.6) contrast(1.1);
+      transition: filter 0.3s ease, transform 0.3s ease;
+    }
+
+    .story-card:hover .card-image-frame img {
+      filter: saturate(0.9) contrast(1.1);
+      transform: scale(1.02);
+    }
+
+    /* Placeholder gradient when no image exists */
+    .card-placeholder {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, var(--deep) 0%, var(--violet-dim) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .card-placeholder::before {
+      content: 'NO VISUAL ATTACHED';
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 16px;
+      letter-spacing: 0.25em;
+      color: var(--muted);
+      opacity: 0.5;
+    }
+
+    .card-content {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+
+    .card-tag {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      color: var(--violet);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .card-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      line-height: 1.1;
+      color: #f0ece8;
+      margin-bottom: 12px;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      transition: color 0.3s ease;
+    }
+
+    .story-card:hover .card-title {
+      color: var(--glow);
+    }
+
+    .card-desc {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 20px;
+      flex-grow: 1;
+    }
+
+    .card-meta {
+      border-top: 1px dashed var(--rule);
+      padding-top: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--dust);
+    }
+
+    .card-status-badge {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      background: var(--violet-dim);
+      color: var(--glow);
+      padding: 2px 8px;
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      border-top: 1px solid var(--rule);
+      background: var(--deep);
+      padding: 40px clamp(24px, 6vw, 80px);
+    }
+
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-inner span {
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    /* ─── FADE-IN ANIMATION ─── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .masthead-inner,
+    .grid-wrap {
+      animation: fadeUp 0.8s ease both;
+    }
+
+    .grid-wrap { animation-delay: 0.25s; }
+
+    @media (max-width: 600px) {
+      .footer-inner {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="pulsar-sweep"></div>
+
+  <div class="hazard-bar"></div>
+
+  <!-- MASTHEAD -->
+  <header class="masthead">
+    <div class="masthead-inner">
+      <div class="publication-tag">Helix Extractive Solutions Database</div>
+      <h1 class="main-title">
+        The Yonkers
+        <span class="highlight">Veil</span>
+      </h1>
+      
+      <div class="intro-box">
+        <p>A collection of stories about desperate people, unhinged optimists, and corporate hell set on a barely-habitable mining planet orbiting a neutron star.</p>
+        <p><em>Only idiots, dreamers, and the deeply indebted come to Yonkers. Everyone else has the good sense to stay away.</em></p>
+      </div>
+    </div>
+  </header>
+
+  <!-- STORIES GRID -->
+  <main class="grid-wrap">
+    <div class="story-grid">
+
+      <!-- Story 1 -->
+      <a href="before-the-parade/" class="story-card">
+        <div class="card-image-frame">
+          <img src="before-the-parade/before_the_parade_passes_by.jpg" alt="Two miners looking at the horizon as the pulsar beam sweeps overhead" />
+        </div>
+        <div class="card-content">
+          <div class="card-tag">Worker File 19-B</div>
+          <h2 class="card-title">Before the Parade Passes By</h2>
+          <p class="card-desc">On a mining colony orbiting a neutron star, a man starts singing, driving his coworker and the corporate security alignment patrols to the absolute brink.</p>
+          <div class="card-meta">
+            <span>Shaft 19-B</span>
+            <span class="card-status-badge">Labor Incident Logged</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Story 2 -->
+      <a href="captain-bad-decisions/" class="story-card">
+        <div class="card-image-frame">
+          <img src="captain-bad-decisions/andrew_and_the_azure_dream.jpg" style="object-position: top;" alt="A man grinning at the helm of a luxury hoverboat" />
+        </div>
+        <div class="card-content">
+          <div class="card-tag">Worker File 19-B Prequel</div>
+          <h2 class="card-title">Captain of Bad Decisions</h2>
+          <p class="card-desc">Andrew Sternkern gets into massive debt because of a luxury hoverboat with emotionally supportive navigation, qualifying him for off-world positions on Yonkers.</p>
+          <div class="card-meta">
+            <span>Lake Ontario &rarr; YK-441</span>
+            <span class="card-status-badge">Debt Intake</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Story 3 -->
+      <a href="trash-mans-inferno/" class="story-card">
+        <div class="card-image-frame">
+          <img src="trash-mans-inferno/the_explosion.jpg" alt="A garbage truck exploding in a shower of colors" />
+        </div>
+        <div class="card-content">
+          <div class="card-tag">Worker File 19-B Prequel</div>
+          <h2 class="card-title">The Trash Man's Inferno</h2>
+          <p class="card-desc">Barnaby Williams compacts an improperly classified self-heating noodle canister, destroying his garbage truck, making him internet famous, and sending him to Yonkers.</p>
+          <div class="card-meta">
+            <span>Transit &rarr; YK-441</span>
+            <span class="card-status-badge">Foreclosed</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Story 4 -->
+      <a href="first-contact/" class="story-card">
+        <div class="card-image-frame">
+          <img src="first-contact/taking_samples.jpg" alt="Surveyors Gideon Vale and Martin Krake on the surface of Yonkers taking mineral samples" />
+        </div>
+        <div class="card-content">
+          <div class="card-tag">Historical Survey 01-A</div>
+          <h2 class="card-title">First Contact</h2>
+          <p class="card-desc">Surveyors Gideon Vale and Martin Krake land on YK-441 for the first time, arguing about future cities, capitalism, and whether kids would love a planet with a screaming sky.</p>
+          <div class="card-meta">
+            <span>YK-441 Survey</span>
+            <span class="card-status-badge">First Landfall</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Story 5 -->
+      <a href="unlimited-power/" class="story-card">
+        <div class="card-image-frame">
+          <img src="unlimited-power/gideons_idea.jpg" alt="Gideon's project layout of the pulsar collector star shield" />
+        </div>
+        <div class="card-content">
+          <div class="card-tag">Historical Survey 01-B</div>
+          <h2 class="card-title">Unlimited Power</h2>
+          <p class="card-desc">Gideon proposes directly harvesting the relativistic particle jet of the dead star. Martin attempts to explain basic astrophysics and considers opening the airlock.</p>
+          <div class="card-meta">
+            <span>Transit Outbound</span>
+            <span class="card-status-badge">Psych Screening Triggered</span>
+          </div>
+        </div>
+      </a>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <span>The Yonkers Veil — Complete Anthology</span>
+      <span>Helix Extractive Solutions © All Lungs Reserved</span>
+    </div>
+  </footer>
+
+</body>
+</html>

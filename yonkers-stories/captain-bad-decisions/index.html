@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Captain of Bad Decisions</title>
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Captain of Bad Decisions">
+  <meta name="twitter:description" content="Andrew Sternkern bought a luxury hoverboat. Now he is on Yonkers.">
+  <meta name="twitter:image" content="andrew_and_the_azure_dream.jpg">
+
+  <meta property="og:title" content="Captain of Bad Decisions">
+  <meta property="og:description" content="Andrew Sternkern bought a luxury hoverboat. Now he is on Yonkers.">
+  <meta property="og:image" content="andrew_and_the_azure_dream.jpg">
+  <meta property="og:type" content="article">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:ital,wght@0,300;0,400;1,300&family=Playfair+Display:ital,wght@0,400;1,400;1,700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --dust:       #c4b8a8;
+      --void:       #0e0c0f;
+      --deep:       #16121a;
+      --panel:      #1e1824;
+      --violet:     #6b3fa0;
+      --violet-dim: #3d2260;
+      --glow:       #b07aff;
+      --caution:    #e8c44a;
+      --warning:    #d9472b;
+      --text:       #d4ccc8;
+      --muted:      #7a7068;
+      --rule:       #2e2838;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--void);
+      color: var(--text);
+      font-family: 'DM Mono', monospace;
+      font-weight: 300;
+      font-size: 15px;
+      line-height: 1.85;
+      overflow-x: hidden;
+    }
+
+    /* ─── GRAIN OVERLAY ─── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 999;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 256px;
+    }
+
+    /* ─── PULSAR SWEEP ANIMATION ─── */
+    @keyframes sweep {
+      0%   { transform: translateX(-110%) skewX(-8deg); opacity: 0; }
+      8%   { opacity: 1; }
+      92%  { opacity: 1; }
+      100% { transform: translateX(110%) skewX(-8deg); opacity: 0; }
+    }
+
+    .pulsar-sweep {
+      position: fixed;
+      top: 0; left: 0;
+      width: 180px; height: 100vh;
+      background: linear-gradient(90deg, transparent, rgba(176, 122, 255, 0.04), transparent);
+      pointer-events: none;
+      z-index: 1;
+      animation: sweep 11s ease-in-out infinite;
+    }
+
+    /* ─── HAZARD STRIPE HEADER ─── */
+    .hazard-bar {
+      width: 100%;
+      height: 6px;
+      background: repeating-linear-gradient(
+        -45deg,
+        var(--caution) 0px,
+        var(--caution) 12px,
+        var(--void) 12px,
+        var(--void) 24px
+      );
+      opacity: 0.85;
+    }
+
+    /* ─── MASTHEAD ─── */
+    .masthead {
+      position: relative;
+      background: var(--deep);
+      border-bottom: 1px solid var(--rule);
+      padding: 0 clamp(24px, 6vw, 80px);
+      overflow: hidden;
+    }
+
+    .masthead::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 120% at 60% 50%, rgba(107,63,160,0.18) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .masthead-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 40px;
+      padding: 48px 0 40px;
+    }
+
+    .publication-tag {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.35em;
+      color: var(--violet);
+      text-transform: uppercase;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .publication-tag::before {
+      content: '';
+      display: inline-block;
+      width: 24px;
+      height: 1px;
+      background: var(--violet);
+    }
+
+    h1.title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(52px, 9vw, 110px);
+      line-height: 0.92;
+      letter-spacing: 0.02em;
+      color: #f0ece8;
+      text-transform: uppercase;
+    }
+
+    h1.title .highlight {
+      color: var(--glow);
+      display: block;
+    }
+
+    .meta-block {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 10px;
+    }
+
+    .meta-item {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .meta-item strong {
+      color: var(--dust);
+      font-weight: 400;
+    }
+
+    .warning-badge {
+      display: inline-block;
+      background: var(--warning);
+      color: #fff;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 12px;
+      letter-spacing: 0.18em;
+      padding: 4px 12px;
+      margin-top: 6px;
+    }
+
+    /* ─── PLACARD ─── */
+    .placard-wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 36px clamp(24px, 6vw, 80px);
+    }
+
+    .placard {
+      border: 1px solid var(--violet-dim);
+      background: rgba(61, 34, 96, 0.22);
+      padding: 22px 28px;
+      position: relative;
+      max-width: 560px;
+    }
+
+    .placard::before {
+      content: '⚠';
+      position: absolute;
+      top: -1px; left: -1px;
+      font-size: 9px;
+      background: var(--violet-dim);
+      color: var(--glow);
+      padding: 3px 6px;
+      letter-spacing: 0.1em;
+    }
+
+    .placard-label {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 19px;
+      letter-spacing: 0.3em;
+      color: var(--caution);
+      margin-bottom: 10px;
+    }
+
+    .placard p {
+      font-size: 19px;
+      color: var(--dust);
+      line-height: 1.7;
+    }
+
+    /* ─── HERO IMAGE ─── */
+    .hero-image-wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 clamp(24px, 6vw, 80px) 0;
+      position: relative;
+    }
+
+    .hero-image-frame {
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: var(--panel);
+    }
+
+    .hero-image-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top;
+      display: block;
+      filter: saturate(0.7) contrast(1.1);
+    }
+
+    .hero-image-frame::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        transparent 40%,
+        rgba(14, 12, 15, 0.8) 100%
+      );
+    }
+
+    .hero-caption {
+      position: absolute;
+      bottom: 16px; left: clamp(24px, 6vw, 80px);
+      right: clamp(24px, 6vw, 80px);
+      z-index: 2;
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    /* ─── CONTENT LAYOUT ─── */
+    .content-wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 52px clamp(24px, 6vw, 80px) 80px;
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      gap: 64px;
+      align-items: start;
+    }
+
+    /* ─── STORY BODY ─── */
+    .story {
+      position: relative;
+    }
+
+    .story p {
+      margin-bottom: 1.5em;
+      color: var(--text);
+    }
+
+    /* Dialogue */
+    .story p > em,
+    .story em {
+      font-style: italic;
+      color: var(--dust);
+      font-family: 'Playfair Display', serif;
+      font-size: 16px;
+    }
+
+    /* Blockquotes (the warning placard in story) */
+    .story blockquote {
+      border-left: 2px solid var(--violet);
+      margin: 2em 0;
+      padding: 16px 24px;
+      background: rgba(107,63,160,0.12);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 18px;
+      letter-spacing: 0.22em;
+      color: var(--caution);
+      line-height: 1.6;
+    }
+
+    /* Section breaks */
+    .story hr {
+      border: none;
+      border-top: 1px solid var(--rule);
+      margin: 2.5em 0;
+    }
+
+    /* Sound effects */
+    .sfx {
+      display: block;
+      text-align: center;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      letter-spacing: 0.18em;
+      color: var(--violet-dim);
+      margin: 2em 0;
+      text-shadow: 0 0 40px #af7afff9;
+      text-shadow: 0 0 1px #cdabff, 0 0 1px #cdabff, 0 0 1px #cdabff, 0 0 1px #cdabff, 0 0 1px #cdabff;
+    }
+
+    /* Stage directions / narrator asides */
+    .aside {
+      font-size: 14px;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    /* ─── SIDEBAR ─── */
+    .sidebar {
+      position: sticky;
+      top: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .sidebar-card {
+      border: 1px solid var(--rule);
+      padding: 20px;
+      background: var(--panel);
+    }
+
+    .sidebar-card .card-label {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      color: var(--violet);
+      margin-bottom: 12px;
+      text-transform: uppercase;
+    }
+
+    .sidebar-card p,
+    .sidebar-card li {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .sidebar-card ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .sidebar-card li {
+      padding: 6px 0;
+      border-bottom: 1px solid var(--rule);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .sidebar-card li:last-child { border-bottom: none; }
+
+    .sidebar-card li span { color: var(--dust); }
+
+    .helix-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      letter-spacing: 0.2em;
+      color: var(--warning);
+      margin-bottom: 4px;
+    }
+
+    .helix-slogan {
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .quote-pull {
+      border-left: 3px solid var(--glow);
+      padding: 14px 18px;
+    }
+
+    .quote-pull blockquote {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 17px;
+      color: var(--dust);
+      line-height: 1.5;
+    }
+
+    .quote-pull cite {
+      display: block;
+      margin-top: 10px;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      color: var(--muted);
+      text-transform: uppercase;
+      font-style: normal;
+    }
+
+    /* ─── FADE-IN ANIMATION ─── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .masthead-inner,
+    .placard-wrap,
+    .hero-image-wrap,
+    .content-wrap {
+      animation: fadeUp 0.8s ease both;
+    }
+
+    .placard-wrap     { animation-delay: 0.15s; }
+    .hero-image-wrap  { animation-delay: 0.25s; }
+    .content-wrap     { animation-delay: 0.4s; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 760px) {
+      .masthead-inner { grid-template-columns: 1fr; }
+      .meta-block { align-items: flex-start; }
+      .content-wrap { grid-template-columns: 1fr; }
+      .sidebar { position: static; }
+      .hero-image-frame { aspect-ratio: 4 / 3; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="pulsar-sweep"></div>
+
+  <div class="hazard-bar"></div>
+
+  <!-- MASTHEAD -->
+  <header class="masthead">
+    <div class="masthead-inner">
+      <div>
+        <div class="publication-tag">Helix Extractive Solutions — Worker File 19-B</div>
+        <h1 class="title">
+          Captain of
+          <span class="highlight">Bad Decisions</span>
+        </h1>
+      </div>
+      <div class="meta-block">
+        <div class="meta-item">Sector <strong>Lake Ontario IV &rarr; Yonkers</strong></div>
+        <div class="meta-item">Asset <strong>Azure Dream 5000</strong></div>
+        <div class="meta-item">Orbit <strong>Neutron Class VII</strong></div>
+        <div class="meta-item">Pulsar Cycle <strong>11 sec</strong></div>
+        <div class="meta-item">Classification <strong>Debt Intake</strong></div>
+        <div class="warning-badge">Positivity Delinquency Logged</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO IMAGE -->
+  <div class="hero-image-wrap">
+    <div class="hero-image-frame">
+      <img src="andrew_and_the_azure_dream.jpg" alt="Andrew Sternkern wearing mirrored sunglasses, grinning at the helm of the Azure Dream 5000 luxury hoverboat with artificial teak floors" />
+    </div>
+    <div class="hero-caption">
+      <span>Lake Ontario IV — Showroom Delivery Photograph</span>
+      <span>© Horizon Fidelity Financial. Foreclosure Active.</span>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="content-wrap">
+
+    <!-- STORY -->
+    <article class="story">
+
+      <p>Andrew Sternkern got into debt because of a hoverboat.</p>
+      <p>Not a practical hoverboat.</p>
+      <p>Not a transport hoverboat.</p>
+      <p>Not even a legal hoverboat on most inner-system waterways.</p>
+      <p>No, Andrew financed a <em>luxury recreational</em> hoverboat called the <em>Azure Dream 5000</em>, which had artificial teak floors, a cocktail synthesizer, and an onboard AI whose primary feature was “emotionally supportive navigation.”</p>
+      <p>He bought it during what he later described as “a spiritually vulnerable weekend.”</p>
+      
+      <p>At the showroom, the salesman had leaned close and whispered:</p>
+      <p><em>“You strike me as a man who deserves open water.”</em></p>
+      <p>Andrew had never once expressed interest in open water.</p>
+      <p>But the showroom had mood lighting.</p>
+      <p>And free shrimp.</p>
+      <p>And the AI on the hoverboat kept calling him “Captain.”</p>
+
+      <p class="aside">Three hours later he had signed seventeen documents on a glowing tablet while mildly drunk on complimentary champagne.</p>
+      
+      <p>The salesman shook his hand.</p>
+      <p><em>“Congratulations, Captain Sternkern.”</em></p>
+      
+      <p>Andrew had floated home across Lake Ontario IV wearing mirrored sunglasses and grinning like an idiot.</p>
+      <p>For about four months, life was incredible.</p>
+      <p>Then the maintenance fees started.</p>
+      <p>Then the docking fees.</p>
+      <p>Then the anti-gravity calibration fees.</p>
+      <p>Then the “aquatic turbulence compliance surcharge.”</p>
+      <p>Then the AI developed abandonment anxiety and repeatedly called emergency services whenever Andrew left it alone longer than eight hours.</p>
+
+      <p class="aside">The final blow came when the hoverboat attempted to “improve passenger morale” by serving experimental margaritas at full speed during a family tour.</p>
+
+      <p>Seven people suffered minor spinal injuries.</p>
+      <p>One woman sued because the AI called her “first mate chunky.”</p>
+      <p>Andrew sold the hoverboat immediately.</p>
+      <p>Unfortunately, he still owed almost ninety thousand credits to Horizon Fidelity Financial.</p>
+      <p>Which sounded respectable.</p>
+      <p>Professional.</p>
+      <p>Independent.</p>
+      <p>The logo had a mountain on it.</p>
+      <p>Mountains meant trust.</p>
+      
+      <p class="aside">Three months later Andrew received a polite message:</p>
+      
+      <blockquote>
+        <div class="placard-label">Horizon Fidelity Notification</div>
+        <p>WE VALUE YOUR CONTINUED FINANCIAL JOURNEY.</p>
+      </blockquote>
+
+      <p>Below that:</p>
+      <p><em>“Horizon Fidelity Financial is proud to be a wholly owned subsidiary of Helix Extractive Solutions.”</em></p>
+      
+      <p>Andrew actually laughed out loud when he read it.</p>
+      <p>Then he stopped laughing when the next line appeared.</p>
+      <p><em>“Due to payment delinquency, you may qualify for our Debt Resolution Through Opportunity Program.”</em></p>
+      
+      <p>Another line appeared.</p>
+      <p><em>“EXCITING OFF-WORLD POSITIONS AVAILABLE.”</em></p>
+      
+      <p>Another.</p>
+      <p><em>“NO EXPERIENCE NECESSARY.”</em></p>
+      
+      <p>Then:</p>
+      <p><em>“*Radiation resistance preferred but not required.*”</em></p>
+
+      <p>Andrew stared at the screen.</p>
+      <p>“Oh no.”</p>
+
+      <p class="aside">A month later he sat inside a transport shuttle with forty-three other debtors.</p>
+      <p>Across from him, a man wearing casino slippers asked, “What’d you do?”</p>
+      <p>Andrew sighed.</p>
+      <p>“Hoverboat.”</p>
+      <p>The man nodded sympathetically.</p>
+      <p>“Vacation cryptocurrency.”</p>
+      <p>Another passenger raised her hand.</p>
+      <p>“Designer alpaca cloning.”</p>
+      <p>A fourth muttered:</p>
+      <p>“I accidentally subscribed to premium healthcare.”</p>
+      <p>Everyone nodded.</p>
+      
+      <p class="aside">The shuttle rattled violently.</p>
+      <p class="aside">A corporate orientation video flickered onto the cabin walls.</p>
+
+      <p>A smiling woman appeared.</p>
+      <p><em>“Welcome to the Helix family!”</em></p>
+      <p class="aside">Behind her was clearly a stock image of people laughing at salad.</p>
+      
+      <p><em>“At Helix, we believe hard work builds character.”</em></p>
+      <p class="aside">The screen briefly glitched. For three frames, Andrew saw a mining accident. Then the woman returned.</p>
+
+      <p><em>“Your debt is our opportunity!”</em></p>
+      <p class="aside">Another glitch. A man screaming. Then back again.</p>
+
+      <p><em>“Remember: a positive attitude is mandatory.”</em></p>
+      <p class="aside">A tiny disclaimer scrolled by at the speed of light:</p>
+      <p class="aside"><em>Failure to maintain positivity may result in corrective morale procedures.</em></p>
+
+      <p>The passenger beside Andrew leaned over.</p>
+      <p>“You think they can legally say that?”</p>
+      <p>Andrew looked around the shuttle. Every seat had restraints. The windows were barred. A man near the back was crying into a complimentary Helix nutrition brick.</p>
+      <p>“No,” Andrew said quietly. “I think they can afford lawyers.”</p>
+
+      <p class="aside">The shuttle descended through purple clouds. Outside the window, the surface of Yonkers appeared.</p>
+      <p class="aside">Black rock. Violet dust. Lightning crawling silently across the horizon.</p>
+      <p class="aside">And every eleven seconds—</p>
+
+      <span class="sfx">WHUMMMMMM.</span>
+
+      <p class="aside">A pale beam swept across the planet. Several passengers looked alarmed.</p>
+      <p>The orientation woman reappeared.</p>
+      <p><em>“The local pulsar beam is completely safe within regulated exposure limits!”</em></p>
+      <p class="aside">A disclaimer appeared beneath her:</p>
+      <p class="aside"><em>REGULATED BY HELIX.</em></p>
+
+      <p class="aside">The shuttle landed hard. Andrew stumbled down the ramp wearing a brand-new mining suit that still smelled like factory plastic and despair.</p>
+      <p class="aside">The airlock doors opened. The violet wasteland stretched endlessly before him. Huge drilling towers clawed at the sky. Security crawlers rolled through the dust.</p>
+      <p class="aside">Far off in the distance stood the faded remains of an ancient survey beacon. Almost buried now. Still blinking weakly.</p>
+
+      <p><em>“WELCOME, PIONEERS!”</em></p>
+      
+      <p>Someone behind Andrew muttered:</p>
+      <p>“Well this was a mistake.”</p>
+      
+      <p>Andrew looked around slowly. The deadly sky. The mining pits. The endless corporate machinery.</p>
+      <p>Then he checked his debt balance on the wrist display. Instead of going down, it had somehow increased during the flight.</p>
+      <p>He stared at it.</p>
+      <p>“How.”</p>
+
+      <p>A nearby supervisor answered without even looking up from his tablet.</p>
+      <p>“Transportation fees.”</p>
+      <p>“What transportation fees?”</p>
+      <p>“The shuttle.”</p>
+      <p>“You brought me here.”</p>
+      <p>“Yes.”</p>
+      <p>“And charged me for it?”</p>
+      <p>“Yes.”</p>
+
+      <p>Andrew opened his mouth. Closed it. Opened it again.</p>
+      <p>“...that feels evil.”</p>
+      <p>The supervisor shrugged.</p>
+      <p>“Welcome to Yonkers.”</p>
+
+    </article>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+      <div class="sidebar-card">
+        <div class="helix-logo">HELIX</div>
+        <div class="helix-slogan">Extractive Solutions™</div>
+        <p style="margin-top:12px;">Your productivity is our purpose. Your purpose is our productivity. Unauthorized optimism is logged and filed under Form 91-F (Emotional Deviation).</p>
+      </div>
+
+      <div class="sidebar-card">
+        <div class="card-label">Debt Profile</div>
+        <ul>
+          <li>Debtor <span>A. Sternkern</span></li>
+          <li>Source <span>Horizon Fidelity</span></li>
+          <li>Asset type <span>Luxury Hoverboat</span></li>
+          <li>Interest rate <span>17.4% APR</span></li>
+          <li>Status <span style="color: var(--warning);">Delinquent</span></li>
+        </ul>
+      </div>
+
+      <div class="sidebar-card">
+        <div class="card-label">Pulsar Cycle Data</div>
+        <ul>
+          <li>Period <span>11 seconds</span></li>
+          <li>Radiation <span>Class VII</span></li>
+          <li>Suit alerts <span>Active</span></li>
+          <li>Humming <span style="color:var(--glow);">Confirmed</span></li>
+        </ul>
+      </div>
+
+    </aside>
+  </div>
+
+  <footer>
+    <div class="footer-inner">
+      <span>Captain of Bad Decisions &nbsp;·&nbsp; A Story</span>
+      <span>Arrival Sector &nbsp;·&nbsp; Yonkers &nbsp;·&nbsp; Orbit VII</span>
+    </div>
+  </footer>
+
+</body>
+</html>
